@@ -3,12 +3,12 @@ import {
 	OpenAPIRouteSchema,
 	Path,
 } from "@cloudflare/itty-router-openapi";
-import { Task } from "../types";
+import { EnvironementType } from "../../types";
 
-export class TaskDelete extends OpenAPIRoute {
+export class environementStop extends OpenAPIRoute {
 	static schema: OpenAPIRouteSchema = {
-		tags: ["Tasks"],
-		summary: "Delete a Task",
+		tags: ["Environements"],
+		summary: "Stop a running environement",
 		parameters: {
 			taskSlug: Path(String, {
 				description: "Task slug",
@@ -20,7 +20,7 @@ export class TaskDelete extends OpenAPIRoute {
 				schema: {
 					success: Boolean,
 					result: {
-						task: Task,
+						task: EnvironementType,
 					},
 				},
 			},

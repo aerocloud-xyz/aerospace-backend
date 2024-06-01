@@ -2,20 +2,20 @@ import {
 	OpenAPIRoute,
 	OpenAPIRouteSchema,
 } from "@cloudflare/itty-router-openapi";
-import { Task } from "../types";
+import { EnvironementType } from "../../types";
 
-export class TaskCreate extends OpenAPIRoute {
+export class environementStart extends OpenAPIRoute {
 	static schema: OpenAPIRouteSchema = {
-		tags: ["Tasks"],
-		summary: "Create a new Task",
-		requestBody: Task,
+		tags: ["Environements"],
+		summary: "Start a stopped environement",
+		requestBody: EnvironementType,
 		responses: {
 			"200": {
 				description: "Returns the created task",
 				schema: {
 					success: Boolean,
 					result: {
-						task: Task,
+						task: EnvironementType,
 					},
 				},
 			},

@@ -3,12 +3,12 @@ import {
 	OpenAPIRouteSchema,
 	Path,
 } from "@cloudflare/itty-router-openapi";
-import { Task } from "../types";
+import { EnvironementType } from "../../types";
 
-export class TaskFetch extends OpenAPIRoute {
+export class environementPause extends OpenAPIRoute {
 	static schema: OpenAPIRouteSchema = {
-		tags: ["Tasks"],
-		summary: "Get a single Task by slug",
+		tags: ["Environements"],
+		summary: "Pause an environement",
 		parameters: {
 			taskSlug: Path(String, {
 				description: "Task slug",
@@ -20,7 +20,7 @@ export class TaskFetch extends OpenAPIRoute {
 				schema: {
 					success: Boolean,
 					result: {
-						task: Task,
+						task: EnvironementType,
 					},
 				},
 			},
@@ -43,22 +43,6 @@ export class TaskFetch extends OpenAPIRoute {
 		// Retrieve the validated slug
 		const { taskSlug } = data.params;
 
-		// Implement your own object fetch here
-
-		const exists = true;
-
-		// @ts-ignore: check if the object exists
-		if (exists === false) {
-			return Response.json(
-				{
-					success: false,
-					error: "Object not found",
-				},
-				{
-					status: 404,
-				}
-			);
-		}
 
 		return {
 			success: true,
