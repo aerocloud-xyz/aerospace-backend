@@ -5,6 +5,11 @@ import {
 } from "@cloudflare/itty-router-openapi";
 import { EnvironementType } from "../../types";
 import { error } from "console";
+import { ClientSecretCredential } from "@azure/identity";
+import {
+  ContainerGroup,
+  ContainerInstanceManagementClient,
+} from "@azure/arm-containerinstance";
 
 export class environementCreate extends OpenAPIRoute {
   static schema: OpenAPIRouteSchema = {
@@ -65,6 +70,42 @@ export class environementCreate extends OpenAPIRoute {
     context: any,
     data: Record<string, any>
   ) {
+    const subscriptionId = "placeholder";
+    const credential = new ClientSecretCredential(
+      "placeholder",     //tenantid
+      "placeholder",     // clientid
+      "placeholder"      //secret
+    );
+    const mgmtClient = new ContainerInstanceManagementClient(
+      credential,
+      subscriptionId
+    );
+
+    const containerGroup: ContainerGroup = {
+      containers: [
+        {
+          name: "abcdefg-12345",
+          command: [],
+          environmentVariables: [],
+          image: "gitpod/openvscode-server",
+          ports: [{ port: 3000 }],
+          resources: { requests: { cpu: 1, memoryInGB: 1.5 } },
+        },
+      ],
+      imageRegistryCredentials: [],
+      ipAddress: { type: "Public", ports: [{ port: 3000, protocol: "TCP" }] },
+      location: "westeurope",
+      osType: "Linux",
+      sku: "Standard",
+    };
+
+    const result = await mgmtClient.containerGroups.beginCreateOrUpdateAndWait(
+      "aerospace",
+      "user-placeholder",
+      containerGroup
+    );
+
+    console.log(result);
     // Retrieve the validated parameters
     const { page, isCompleted } = data.query;
 
