@@ -70,11 +70,11 @@ export class environementCreate extends OpenAPIRoute {
     context: any,
     data: Record<string, any>
   ) {
-    const subscriptionId = "placeholder";
+    const subscriptionId = env.SUBSCRIPTIONID;
     const credential = new ClientSecretCredential(
-      "placeholder",     //tenantid
-      "placeholder",     // clientid
-      "placeholder"      //secret
+      env.TENANTID,     //tenantid
+      env.CLIENTID,     // clientid
+      env.CLIENTSECRET, //secret
     );
     const mgmtClient = new ContainerInstanceManagementClient(
       credential,
@@ -89,7 +89,7 @@ export class environementCreate extends OpenAPIRoute {
           environmentVariables: [],
           image: "gitpod/openvscode-server",
           ports: [{ port: 3000 }],
-          resources: { requests: { cpu: 1, memoryInGB: 1.5 } },
+          resources: { requests: { cpu: 1, memoryInGB: 1 } },
         },
       ],
       imageRegistryCredentials: [],
@@ -98,7 +98,6 @@ export class environementCreate extends OpenAPIRoute {
       osType: "Linux",
       sku: "Standard",
     };
-
     const result = await mgmtClient.containerGroups.beginCreateOrUpdateAndWait(
       "aerospace",
       "user-placeholder",
