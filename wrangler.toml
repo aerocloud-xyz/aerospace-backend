@@ -2,6 +2,7 @@
 name = "aerospace-backend"
 main = "src/index.ts"
 compatibility_date = "2024-05-29"
+node_compat = true
 
 # Automatically place your workloads in an optimal location to minimize latency.
 # If you are running back-end logic in a Worker, running it closer to your back-end infrastructure
@@ -15,8 +16,9 @@ compatibility_date = "2024-05-29"
 # - https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
 # Note: Use secrets to store sensitive data.
 # - https://developers.cloudflare.com/workers/configuration/secrets/
-# [vars]
-# MY_VARIABLE = "production_value"
+[vars]
+ISSUER_ENDPOINT = "https://5ujc48.logto.app/oidc"
+WORKER_RESOURCE_INDICATOR = "https://orchestrator.aerocloud.xyz/"
 
 # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#workers-ai

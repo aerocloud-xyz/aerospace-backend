@@ -25,7 +25,7 @@ router.get("/api/environements/remove", environementRemove);
 
 
 // 404 for everything else
-router.all("*", () =>
+router.all("*", (reg, res, next) =>
 	Response.json(
 		{
 			success: false,

@@ -4,12 +4,12 @@ import {
   Query,
 } from "@cloudflare/itty-router-openapi";
 import { EnvironementType } from "../../types";
-import { error } from "console";
 import { ClientSecretCredential } from "@azure/identity";
 import {
   ContainerGroup,
   ContainerInstanceManagementClient,
 } from "@azure/arm-containerinstance";
+import { authorizationValidator } from "middleware/authMiddleware";
 
 export class environementCreate extends OpenAPIRoute {
   static schema: OpenAPIRouteSchema = {
@@ -98,27 +98,29 @@ export class environementCreate extends OpenAPIRoute {
       osType: "Linux",
       sku: "Standard",
     };
-    const result = await mgmtClient.containerGroups.beginCreateOrUpdateAndWait(
-      "aerospace",
-      "user-placeholder",
-      containerGroup
-    );
-
-    console.log(result);
-    // Retrieve the validated parameters
-    const { page, isCompleted } = data.query;
-
-    // Implement your own object list here
-
-    return {
-      success: true,
-      tasks: {
-        name: "Clean my room",
-        slug: "clean-room",
-        description: null,
-        completed: false,
-        due_date: "2025-01-05",
-      },
-    };
+    const authValidator = await authorizationValidator(request, env, ['aerospace:dothings']);
+      console.log('Authenticated succesfully!');
+      const result = await mgmtClient.containerGroups.beginCreateOrUpdateAndWait(
+        "aerospace",
+        "user-placeholder",
+        containerGroup
+      );
+  
+      console.log(result);
+      // Retrieve the validated parameters
+      const { page, isCompleted } = data.query;
+  
+      // Implement your own object list here
+  
+      return {
+        success: true,
+        tasks: {
+          name: "Clean my room",
+          slug: "clean-room",
+          description: null,
+          completed: false,
+          due_date: "2025-01-05",
+        },
+      };
   }
 }
