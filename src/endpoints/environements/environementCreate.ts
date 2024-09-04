@@ -3,26 +3,37 @@ import {
   OpenAPIRouteSchema,
   Query,
 } from "@cloudflare/itty-router-openapi";
-import { EnvironementAzureResonseReassignement, EnvironementType } from "../../types";
+import { EnvironementType } from "../../types";
 import { ClientSecretCredential } from "@azure/identity";
 import {
   ContainerGroup,
   ContainerInstanceManagementClient,
 } from "@azure/arm-containerinstance";
-import { authorizationValidator } from "middleware/authMiddleware";
 
 export class environementCreate extends OpenAPIRoute {
   static schema: OpenAPIRouteSchema = {
     tags: ["Environements"],
     summary: "Create an environement",
     parameters: {
-      page: Query(Number, {
-        description: "Page number",
-        default: 0,
+      name: Query(String, {
+        description: "The name of the environement, set by the user or automatically generated. maximum length of 63 characters!",
+        default: "Placeholder"
       }),
-      isCompleted: Query(Boolean, {
-        description: "Filter by completed flag",
-        required: false,
+      platform: Query(String, {
+        description: "The platform for the container (linux; debian; ubuntu etc)",
+        default: "Linux"
+      }),
+      location: Query(String, {
+        description: "The resource geographic location",
+        default: "westeurope"
+      }),
+      resourcesMemory: Query(Number, {
+        description: "Number of gigabytes of memory",
+        default: 1
+      }),
+      resourcesCPU: Query(Number, {
+        description: "Number of CPU cores",
+        default: 1
       }),
     },
     responses: {
@@ -81,35 +92,39 @@ export class environementCreate extends OpenAPIRoute {
       subscriptionId
     );
 
+    // Retrieve the validated parameters
+    const { name, platform, location, resourcesMemory, resourcesCPU } = data.query;
+
     const containerGroup: ContainerGroup = {
       containers: [
         {
-          name: "abcdefg-12345",
+          name: name,
           command: [],
           environmentVariables: [],
           image: "gitpod/openvscode-server",
           ports: [{ port: 3000 }],
-          resources: { requests: { cpu: 1, memoryInGB: 1 } },
+          resources: { requests: { cpu: resourcesCPU, memoryInGB: resourcesMemory } },
         },
       ],
-      imageRegistryCredentials: [],
+      imageRegistryCredentials: [{
+        server: "index.docker.io",
+        username: env.DOCKER_USERNAME,
+        password: env.DOCKER_PASSWORD,
+      }],
       ipAddress: { type: "Public", ports: [{ port: 3000, protocol: "TCP" }] },
-      location: "westeurope",
-      osType: "Linux",
+      location: location,
+      osType: platform,
       sku: "Standard",
     };
-    const authValidator = await authorizationValidator(request, env, ['aerospace:dothings']);
+      //perform authentication
       console.log('Authenticated succesfully!');
       const result = await mgmtClient.containerGroups.beginCreateOrUpdateAndWait(
         "aerospace",
-        "user-placeholder",
-        containerGroup
+        "insert-email-md5-hash",
+        containerGroup 
       );
   
       console.log(result);
-      // Retrieve the validated parameters
-      const { page, isCompleted } = data.query;
-  
       // Implement your own object list here
   
       const responseBuild = {
@@ -124,13 +139,7 @@ export class environementCreate extends OpenAPIRoute {
       }
       return {
         success: true,
-        tasks: {
-          name: "Clean my room",
-          slug: "clean-room",
-          description: null,
-          completed: false,
-          due_date: "2025-01-05",
-        },
+        environement: responseBuild
       };
   }
 }
