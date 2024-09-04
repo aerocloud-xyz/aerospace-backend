@@ -12,12 +12,14 @@
 		"@azure/arm-containerinstance": "^9.1.0",
 		"@azure/identity": "^4.4.1",
 		"@cloudflare/itty-router-openapi": "^1.0.1",
+		"@neondatabase/serverless": "^0.9.4",
+		"aerospace-backend": "file:",
 		"jose": "^5.4.0"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20240529.0",
 		"@types/node": "^20.5.7",
 		"@types/service-worker-mock": "^2.0.1",
-		"wrangler": "^3.0.0"
+		"wrangler": "^3.73.0"
 	}
 }

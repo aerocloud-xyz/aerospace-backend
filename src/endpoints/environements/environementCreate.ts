@@ -3,7 +3,7 @@ import {
   OpenAPIRouteSchema,
   Query,
 } from "@cloudflare/itty-router-openapi";
-import { EnvironementType } from "../../types";
+import { EnvironementAzureResonseReassignement, EnvironementType } from "../../types";
 import { ClientSecretCredential } from "@azure/identity";
 import {
   ContainerGroup,
@@ -126,8 +126,8 @@ export class environementCreate extends OpenAPIRoute {
   
       console.log(result);
       // Implement your own object list here
-  
-      const responseBuild = {
+ 
+      const responseBuld = {
         containers: result.containers,
         ipAdress: result.ipAddress,
         location: result.location,
