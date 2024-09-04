@@ -9,31 +9,20 @@ import {
   ContainerGroup,
   ContainerInstanceManagementClient,
 } from "@azure/arm-containerinstance";
+import { authorizationValidator } from "middleware/authMiddleware";
 
 export class environementCreate extends OpenAPIRoute {
   static schema: OpenAPIRouteSchema = {
     tags: ["Environements"],
     summary: "Create an environement",
     parameters: {
-      name: Query(String, {
-        description: "The name of the environement, set by the user or automatically generated. maximum length of 63 characters!",
-        default: "Placeholder"
+      page: Query(Number, {
+        description: "Page number",
+        default: 0,
       }),
-      platform: Query(String, {
-        description: "The platform for the container (linux; debian; ubuntu etc)",
-        default: "Linux"
-      }),
-      location: Query(String, {
-        description: "The resource geographic location",
-        default: "westeurope"
-      }),
-      resourcesMemory: Query(Number, {
-        description: "Number of gigabytes of memory",
-        default: 1
-      }),
-      resourcesCPU: Query(Number, {
-        description: "Number of CPU cores",
-        default: 1
+      isCompleted: Query(Boolean, {
+        description: "Filter by completed flag",
+        required: false,
       }),
     },
     responses: {
@@ -92,42 +81,38 @@ export class environementCreate extends OpenAPIRoute {
       subscriptionId
     );
 
-    // Retrieve the validated parameters
-    const { name, platform, location, resourcesMemory, resourcesCPU } = data.query;
-
     const containerGroup: ContainerGroup = {
       containers: [
         {
-          name: name,
+          name: "abcdefg-12345",
           command: [],
           environmentVariables: [],
           image: "gitpod/openvscode-server",
           ports: [{ port: 3000 }],
-          resources: { requests: { cpu: resourcesCPU, memoryInGB: resourcesMemory } },
+          resources: { requests: { cpu: 1, memoryInGB: 1 } },
         },
       ],
-      imageRegistryCredentials: [{
-        server: "index.docker.io",
-        username: env.DOCKER_USERNAME,
-        password: env.DOCKER_PASSWORD,
-      }],
+      imageRegistryCredentials: [],
       ipAddress: { type: "Public", ports: [{ port: 3000, protocol: "TCP" }] },
-      location: location,
-      osType: platform,
+      location: "westeurope",
+      osType: "Linux",
       sku: "Standard",
     };
-      //perform authentication
+    const authValidator = await authorizationValidator(request, env, ['aerospace:dothings']);
       console.log('Authenticated succesfully!');
       const result = await mgmtClient.containerGroups.beginCreateOrUpdateAndWait(
         "aerospace",
-        "insert-email-md5-hash",
-        containerGroup 
+        "user-placeholder",
+        containerGroup
       );
   
       console.log(result);
+      // Retrieve the validated parameters
+      const { page, isCompleted } = data.query;
+  
       // Implement your own object list here
   
-      const responseBuild: EnvironementAzureResonseReassignement = {
+      const responseBuild = {
         containers: result.containers,
         ipAdress: result.ipAddress,
         location: result.location,
@@ -139,7 +124,13 @@ export class environementCreate extends OpenAPIRoute {
       }
       return {
         success: true,
-        environement: responseBuild
+        tasks: {
+          name: "Clean my room",
+          slug: "clean-room",
+          description: null,
+          completed: false,
+          due_date: "2025-01-05",
+        },
       };
   }
 }
