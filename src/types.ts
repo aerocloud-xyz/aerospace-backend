@@ -1,6 +1,5 @@
 import { DateTime, Str } from "@cloudflare/itty-router-openapi";
 import { Container, IpAddress, Volume } from "@azure/arm-containerinstance";
-import { kStringMaxLength } from "buffer";
 
 export type EnvironementAzureResonseReassignement = {
 	containers: Container[] | undefined,
