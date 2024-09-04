@@ -1,5 +1,6 @@
 import { DateTime, Str } from "@cloudflare/itty-router-openapi";
 
+
 export const EnvironementType = {
 	name: new Str({ example: "lorem" }),
 	slug: String,
