@@ -12,6 +12,7 @@ export type EnvironementAzureResonseReassignement = {
 	volumes: Volume[] | undefined,
 };
 
+
 export const EnvironementType = {
 	containers: [{
 		name: String,

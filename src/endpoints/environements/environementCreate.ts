@@ -126,8 +126,8 @@ export class environementCreate extends OpenAPIRoute {
   
       console.log(result);
       // Implement your own object list here
-  
-      const responseBuild: EnvironementAzureResonseReassignement = {
+ 
+      const responseBuld = {
         containers: result.containers,
         ipAdress: result.ipAddress,
         location: result.location,
