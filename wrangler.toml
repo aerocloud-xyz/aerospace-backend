@@ -16,9 +16,7 @@ node_compat = true
 # - https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
 # Note: Use secrets to store sensitive data.
 # - https://developers.cloudflare.com/workers/configuration/secrets/
-[vars]
-ISSUER_ENDPOINT = "https://5ujc48.logto.app/oidc"
-WORKER_RESOURCE_INDICATOR = "https://orchestrator.aerocloud.xyz/"
+# [vars]
 
 # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#workers-ai
