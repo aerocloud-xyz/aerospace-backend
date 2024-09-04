@@ -12,7 +12,6 @@
 		"@azure/arm-containerinstance": "^9.1.0",
 		"@azure/identity": "^4.2.0",
 		"@cloudflare/itty-router-openapi": "^1.0.1",
-		"@neondatabase/serverless": "^0.9.4",
 		"jose": "^5.4.0"
 	},
 	"devDependencies": {
